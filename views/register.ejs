@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NotesApp</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <main class="container">
+      <form action="/registered" class="mainform" method="POST">
+        <label for="name">Name: </label>
+        <input required type="text" placeholder="Name" name="name" />
+        <label for="name">Username: </label>
+        <input required type="text" placeholder="Username" name="username" />
+        <label for="sdate">Password: </label>
+        <input
+          required
+          type="password"
+          id="date"
+          name="password"
+          placeholder="password"
+        />
+        <button type="submit" class="subBtn">Submit</button>
+      </form>
+      <p style="color: red; font-size: 20px">
+        <% if(error && Array.isArray(error) && error.length > 0) { for(let i =
+        0; i < error.length; i++) { %> <%= error[i] %> <% }} %>
+      </p>
+    </main>
+    <form action="/login" method="GET">
+      Already Have an account?
+      <button type="submit" class="subBtn" style="margin-top: 20px">
+        Login
+      </button>
+    </form>
+  </body>
+</html>

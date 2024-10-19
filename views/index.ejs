@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NotesApp</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <main class="container">
+      <button id="btn" style="margin-bottom: 5px" class="add">
+        Add Task +
+      </button>
+      <form
+        action="/showdata?username=<%= username %>"
+        class="hide mainform"
+        method="POST"
+        id="form"
+      >
+        <label for="name">Task Name: </label>
+        <input required type="text" placeholder="Task Name" name="name" />
+        <label for="sdate">Start Date: </label>
+        <input required type="date" id="date" name="sdate" />
+        <label for="edate">End Date: </label>
+        <input required type="date" id="date" name="edate" />
+        <button type="submit" class="subBtn">Submit</button>
+      </form>
+      <% if(rows){ %>
+      <div>
+        <table class="tasks">
+          <thead>
+            <tr>
+              <th>CheckBox</th>
+              <th>Serial No.</th>
+              <th>Task Name</th>
+              <th>Start Date</th>
+              <th>Due Date</th>
+              <th>Status</th>
+              <th>Deletion</th>
+            </tr>
+            <% for(let i = 0; i < rows.length; i++){ %>
+            <div>
+              <% if(rows[i].isChecked){ %>
+              <tr id="<%= rows[i].tid %>" class="check">
+                <td>
+                  <input
+                    type="checkbox"
+                    id="<%= rows[i].tid %>"
+                    class="checkbox"
+                    checked
+                  />
+                </td>
+                <td><%= i+1 %></td>
+                <td><%= rows[i].tname %></td>
+                <td><%= rows[i].s_date %></td>
+                <td><%= rows[i].initial %></td>
+                <td><%=rows[i].status %></td>
+                <td>
+                  <form
+                    action="/delete?user_id=<%= rows[i].user_id %>"
+                    method="POST"
+                  >
+                    <input
+                      type="text"
+                      hidden
+                      value="<%= rows[i].tid %>"
+                      name="tid"
+                    />
+                    <button type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              <% }else{ %>
+              <tr id="<%= rows[i].tid %>">
+                <td>
+                  <input
+                    type="checkbox"
+                    id="<%= rows[i].tid %>"
+                    class="checkbox"
+                  />
+                </td>
+                <td><%= i+1 %></td>
+                <td><%= rows[i].tname %></td>
+                <td><%= rows[i].s_date %></td>
+                <td><%= rows[i].initial %></td>
+                <td><%=rows[i].status %></td>
+                <td>
+                  <form
+                    action="/delete?user_id=<%= rows[i].user_id %>"
+                    method="POST"
+                  >
+                    <input
+                      type="text"
+                      hidden
+                      value="<%= rows[i].tid %>"
+                      name="tid"
+                    />
+                    <button type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+            </div>
+            <% }} %>
+          </thead>
+        </table>
+        <form action="/logout?username=<%= username %>" method="POST">
+          <button type="submit" class="logout">log out</button>
+        </form>
+      </div>
+    </main>
+    <script>
+      const formIn = document.getElementById("form");
+      const btn = document.getElementById("btn");
+      btn.addEventListener("click", () => {
+        formIn.classList.toggle("hide");
+      });
+      const checkboxes = document.querySelectorAll(".checkbox");
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", function () {
+          const row = checkbox.closest("tr");
+          if (checkbox.checked) {
+            row.classList.add("check");
+          } else {
+            row.classList.remove("check");
+          }
+          const checkboxID = checkbox.id;
+          fetch(`http://localhost:3000/isChecked/${checkbox.id}`).then(
+            (result) => {
+              location.reload();
+            }
+          );
+        });
+      });
+    </script>
+  </body>
+</html>
